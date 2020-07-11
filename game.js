@@ -12,13 +12,26 @@ var pieceArr = ["pawn","knight","bishop","rook","queen"];
 var boardLength = 8;
 // var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
 // var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
+var currentRoom = [1,4];
+var room0 = [];
 var room1 = [[1,4],[3,1],[3,5],[4,2],[4,5],[5,2],[5,5]];
 var room2 = [[1,1],[1,4],[3,2],[4,2],[5,2],[2,3],[5,3],[2,4],[5,5],[5,6],[6,6]];
 var room3 = [[6,1],[2,2],[4,2],[3,3],[4,3],[5,3],[3,4],[4,4],[1,5],[5,5],[5,6]];
+var room4 = [[1,6],[3,1],[2,2],[5,2],[5,3],[2,4],[5,5]];
+var room5 = [[1,3],[6,1],[3,2],[5,2],[2,3],[6,3],[4,4],[3,5],[6,6]];
+var knightRoom = [[3,3],[5,3],[2,4],[6,6],[6,4],[2,6]];
+var noRoom = filledRoom();
 var door1 = [[0,3],[0,4]];
 var door2 = [[3,0],[4,0]];
 var door3 = [[7,3],[7,4]];
 var door4 = [[3,7],[4,7]];
+var roomLayout = [[room5,room2,room1],[room4,room5,room3],[room3,room2,room1],[noRoom,knightRoom,noRoom],[noRoom,room0,noRoom]];
+var doorLayout = [[[door3,door4],[door1,door3,door4],[door1,door4]],
+                    [[door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door4]],
+                    [[door2,door3],[door1,door2,door3,door4],[door1,door2]],
+                    [[],[door2,door4],[]],
+                    [[],[door2],[]]];
+
 {var flagImg = new Image();
 flagImg.src = "assets/flag.png";
 var flag = {x:4, y:9}
@@ -49,7 +62,15 @@ win = false;
 lose = false;
 }
 var queue = [0,1,2,3,4,5,6,7];
-
+function filledRoom() {
+    var room = [];
+    for(var i =1; i < 7; i++){
+        for(var j = 1; j< 7;j++){
+            room.push([i,j]);
+        }
+    }
+    return room;
+}
 function cyclePieces(){
     queue.push(queue.shift());
     // player.currentPiece = (player.currentPiece + 1)%8;
@@ -295,10 +316,11 @@ canvas.addEventListener('click', function(event){
     generateMoveableSquares(player.piece, player.blockedColor);
     var x = Math.floor(event.pageX/50);
     var y = Math.floor(event.pageY/50);
+    // console.log(doorLayout[0][0]);
     // console.log(board);
     // console.log(board[x+10*y]);
     // console.log(x+10*y)
-    console.log(moveableSquares);
+    // console.log(moveableSquares);
     if(inMoveableSquares(x,y)){
         player.x = x;
         player.y = y;
@@ -325,7 +347,9 @@ function drawLose(){
 }
 function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
-    drawBoard();
+    var roomx = currentRoom[1];
+    var roomy = currentRoom[0];
+    drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy]);
     drawQueue();
     context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
     context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
@@ -354,7 +378,17 @@ function findSquares(x,y,list){
     }
     return false;
 }
-function drawBoard(){
+function findDoors(x,y,doors){
+    var isDoor;
+    for(var i = 0; i < doors.length; i++){
+        isDoor = findSquares(x,y,doors[i]);
+        if(isDoor){
+            return isDoor;
+        }
+    }
+    return false;
+}
+function drawBoard(room,doors){
     for(var j = 0; j < 8; j++){
         for(var i = 0; i < 8; i++){
             var color = "gray";
@@ -369,14 +403,15 @@ function drawBoard(){
             }
             
             if( i == 0 || j == 0 || i == 7 || j == 7){
-                if(!findSquares(i,j,door1) && !findSquares(i,j,door2) && !findSquares(i,j,door3) && !findSquares(i,j,door4)){
+                //!findSquares(i,j,door1) && !findSquares(i,j,door2) && !findSquares(i,j,door3) && !findSquares(i,j,door4)
+                if(!findDoors(i,j,doors)){
                     color = "black";
                     r = 0;
                     g = 0;
                     b = 0;
                 }   
             }
-            if(findSquares(i,j,room3)){
+            if(findSquares(i,j,room)){
                 color = "black";
                 r = 0;
                 g = 0;
