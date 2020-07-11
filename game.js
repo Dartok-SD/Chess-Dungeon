@@ -34,11 +34,12 @@ function checkMove(piece, x , y){
 }
 
 function generateMoveableSquares(piece){
+    moveableSquares.splice(0,moveableSquares.length);
     if(piece == "rook" || piece == "queen"){
         var i = 1;
         while(true){
-            if(board[(x+10*y)+i].color !== "Black"){
-                moveableSquares.push(board[x+10*y+i]);
+            if(board[(player.x+10*player.y)+i] && board[(player.x+10*player.y)+i].color !== "black"){
+                moveableSquares.push(board[player.x+10*player.y+i]);
             } else {
                 break;
             }
@@ -46,8 +47,8 @@ function generateMoveableSquares(piece){
         }
         i = -1;
         while(true){
-            if(board[(x+10*y)+i].color !== "Black"){
-                moveableSquares.push(board[x+10*y+i]);
+            if(board[(player.x+10*player.y)+i] && board[ (player.x+10*player.y)+i].color !== "black"){
+                moveableSquares.push(board[player.x+10*player.y+i]);
             } else {
                 break;
             }
@@ -55,8 +56,8 @@ function generateMoveableSquares(piece){
         }
         i = 1;
         while(true){
-            if(board[x+10*(y+i)].color !== "Black"){
-                moveableSquares.push(board[x+10*y+i]);
+            if(board[player.x+10*(player.y+i)] && board[player.x+10*(player.y+i)].color !== "black"){
+                moveableSquares.push(board[player.x+10*(player.y+i)]);
             } else {
                 break;
             }
@@ -64,13 +65,145 @@ function generateMoveableSquares(piece){
         }
         i = -1;
         while(true){
-            if(board[x+10*(y+i)].color !== "Black"){
-                moveableSquares.push(board[x+10*y+i]);
+            if(board[player.x+10*(player.y+i)] && board[player.x+10*(player.y+i)].color !== "black"){
+                moveableSquares.push(board[player.x+10*(player.y+i)]);
             } else {
                 break;
             }
             i--;
         }
+    }
+    if(piece == "bishop" || piece == "queen"){
+        var i = 1;
+        var j = 1;
+        while(true){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+                moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
+            } else {
+                break;
+            }
+            i++;
+            j++;
+        }
+        i = -1;
+        j = 1;
+        while(true){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+                moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
+            } else {
+                break;
+            }
+            i--;
+            j++;
+        }
+        i = 1;
+        j = -1;
+        while(true){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+                moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
+            } else {
+                break;
+            }
+            i++;
+            j--;
+        }
+        i = -1;
+        j = -1;
+        while(true){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+                moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
+            } else {
+                break;
+            }
+            i--;
+            j--;
+        }
+    }
+    if(piece == "knight"){
+        var i = 2;
+        var j = 1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = 2;
+        j = -1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -2;
+        j = 1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -2;
+        j = -1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = 1;
+        j = 2;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = 1;
+        j = -2;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -1;
+        j = 2;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -1;
+        j = -2;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        
+    }
+    if(piece == "king"){
+        var i = 1;
+        var j = 1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = 1;
+        j = -1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -1;
+        j = 1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -1;
+        j = -1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        var i = 1;
+        var j = 0;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = -1;
+        j = 0;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = 0;
+        j = 1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+        i = 0;
+        j = -1;
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        }
+
     }
 }
 
@@ -84,12 +217,14 @@ function inMoveableSquares(x,y){
 }
 
 canvas.addEventListener('click', function(event){
+    generateMoveableSquares("queen");
     var x = Math.floor(event.pageX/50);
     var y = Math.floor(event.pageY/50);
-    console.log(board);
-    console.log(board[x+10*y]);
-    console.log(x+10*y)
-    if(checkMove(player.piece, x,y)){
+    // console.log(board);
+    // console.log(board[x+10*y]);
+    // console.log(x+10*y)
+    // console.log(moveableSquares);
+    if(inMoveableSquares(x,y)){
         player.x = x;
         player.y = y;
     }
