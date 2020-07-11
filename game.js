@@ -8,26 +8,41 @@ var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution
 // var y = 400;
 // var x = 30;
 var player = {x:1, y:1, piece:"queen", currentPiece: 0, nextPiece: 1};
-var assets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
+var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
+var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
 var pieceArr = ["pawn","knight","bishop","rook","queen"];
-var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3]]
+var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
+var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
 var board = [];
 var moveableSquares = [];
-var queen = new Image();
-queen.src = "assests/"+assets[4];
-var rook = new Image();
-rook.src = "assests/"+assets[3];
-var bishop = new Image();
-bishop.src  = "assests/"+assets[2];
-var knight = new Image();
-knight.src  = "assests/"+assets[1];
-imgs = [queen, rook, bishop, knight];
+var wqueen = new Image();
+wqueen.src = "assests/"+wassets[4];
+var wrook = new Image();
+wrook.src = "assests/"+wassets[3];
+var wbishop = new Image();
+wbishop.src  = "assests/"+wassets[2];
+var wknight = new Image();
+wknight.src  = "assests/"+wassets[1];
+var bqueen = new Image();
+bqueen.src = "assests/"+bassets[4];
+var brook = new Image();
+brook.src = "assests/"+bassets[3];
+var bbishop = new Image();
+bbishop.src  = "assests/"+bassets[2];
+var bknight = new Image();
+bknight.src  = "assests/"+bassets[1];
+imgs = [wqueen, wrook, wbishop, wknight, bqueen, brook, bbishop, bknight];
+var wking = new Image();
+wking.src = "assests/wking.png";
+var bking = new Image();
+bking.src = "assests/bking.png";
+
 var dx = 0;
 var dy = 0;
 
 function cyclePieces(){
-    player.currentPiece = (player.currentPiece + 1)%4;
-    player.nextPiece = (player.nextPiece + 1)%4;
+    player.currentPiece = (player.currentPiece + 1)%8;
+    player.nextPiece = (player.nextPiece + 1)%8;
     switch(player.currentPiece){
         case 0:
             player.piece = "queen";
@@ -39,6 +54,18 @@ function cyclePieces(){
             player.piece = "bishop";
             break;
         case 3:
+            player.piece = "knight";
+            break;
+        case 4:
+            player.piece = "queen";
+            break;
+        case 5:
+            player.piece = "rook";
+            break;
+        case 6:
+            player.piece = "bishop";
+            break;
+        case 7:
             player.piece = "knight";
             break;
     }
@@ -60,12 +87,12 @@ function checkMove(piece, x , y){
     return false;
 }
 
-function generateMoveableSquares(piece){
+function generateMoveableSquares(piece, color){
     moveableSquares.splice(0,moveableSquares.length);
     if(piece == "rook" || piece == "queen"){
         var i = 1;
         while(true){
-            if(board[(player.x+10*player.y)+i] && board[(player.x+10*player.y)+i].color !== "black"){
+            if(board[(player.x+10*player.y)+i] && board[(player.x+10*player.y)+i].color !== color){
                 moveableSquares.push(board[player.x+10*player.y+i]);
             } else {
                 break;
@@ -74,7 +101,7 @@ function generateMoveableSquares(piece){
         }
         i = -1;
         while(true){
-            if(board[(player.x+10*player.y)+i] && board[ (player.x+10*player.y)+i].color !== "black"){
+            if(board[(player.x+10*player.y)+i] && board[ (player.x+10*player.y)+i].color !== color){
                 moveableSquares.push(board[player.x+10*player.y+i]);
             } else {
                 break;
@@ -83,7 +110,7 @@ function generateMoveableSquares(piece){
         }
         i = 1;
         while(true){
-            if(board[player.x+10*(player.y+i)] && board[player.x+10*(player.y+i)].color !== "black"){
+            if(board[player.x+10*(player.y+i)] && board[player.x+10*(player.y+i)].color !== color){
                 moveableSquares.push(board[player.x+10*(player.y+i)]);
             } else {
                 break;
@@ -92,7 +119,7 @@ function generateMoveableSquares(piece){
         }
         i = -1;
         while(true){
-            if(board[player.x+10*(player.y+i)] && board[player.x+10*(player.y+i)].color !== "black"){
+            if(board[player.x+10*(player.y+i)] && board[player.x+10*(player.y+i)].color !== color){
                 moveableSquares.push(board[player.x+10*(player.y+i)]);
             } else {
                 break;
@@ -104,7 +131,7 @@ function generateMoveableSquares(piece){
         var i = 1;
         var j = 1;
         while(true){
-            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== color){
                 moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
             } else {
                 break;
@@ -115,7 +142,7 @@ function generateMoveableSquares(piece){
         i = -1;
         j = 1;
         while(true){
-            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== color){
                 moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
             } else {
                 break;
@@ -126,7 +153,7 @@ function generateMoveableSquares(piece){
         i = 1;
         j = -1;
         while(true){
-            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== color){
                 moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
             } else {
                 break;
@@ -137,7 +164,7 @@ function generateMoveableSquares(piece){
         i = -1;
         j = -1;
         while(true){
-            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== "black"){
+            if(board[(player.x+10*(player.y+j))+i] && board[(player.x+10*(player.y+j))+i].color !== color){
                 moveableSquares.push(board[(player.x+10*(player.y+j))+i]);
             } else {
                 break;
@@ -149,42 +176,42 @@ function generateMoveableSquares(piece){
     if(piece == "knight"){
         var i = 2;
         var j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 2;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -2;
         j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -2;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 1;
         j = 2;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 1;
         j = -2;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -1;
         j = 2;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -1;
         j = -2;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         
@@ -192,42 +219,42 @@ function generateMoveableSquares(piece){
     if(piece == "king"){
         var i = 1;
         var j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 1;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -1;
         j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -1;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         var i = 1;
         var j = 0;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -1;
         j = 0;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 0;
         j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 0;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== "black"){
+        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
 
@@ -244,7 +271,7 @@ function inMoveableSquares(x,y){
 }
 
 canvas.addEventListener('click', function(event){
-    generateMoveableSquares(player.piece);
+    generateMoveableSquares(player.piece, "black");
     var x = Math.floor(event.pageX/50);
     var y = Math.floor(event.pageY/50);
     // console.log(board);
@@ -270,10 +297,10 @@ function drawQueue(){
     
     context.drawImage(imgs[player.nextPiece], 600, 100, 50, 50)
 }
-function findSquares(x,y){
-    for(var i =0; i < blackSquares.length; i++){
+function findSquares(x,y,list){
+    for(var i =0; i < list.length; i++){
         // var [a,b] = blackSquares[i];
-        if(blackSquares[i][0] === x && blackSquares[i][1] === y){
+        if(list[i][0] === x && list[i][1] === y){
             return true;
         }
     }
@@ -283,14 +310,14 @@ function drawBoard(){
     for(var j = 0; j < 12; j++){
         for(var i = 0; i < 10; i++){
             var color = "white";
-            var r = 255;
-            var g = 255;
-            var b = 255;
+            var r = 200;
+            var g = 200;
+            var b = 200;
             if((i+j)%2 == 0){
                 color = "gray";
-                r = 150;
-                g = 150;
-                b = 150;
+                r = 100;
+                g = 100;
+                b = 100;
             }
             
             if( i == 0 || j == 0 || i == 9 || j == 11){
@@ -299,11 +326,17 @@ function drawBoard(){
                 g = 0;
                 b = 0;
             }
-            if(findSquares(i,j)){
+            if(findSquares(i,j,blackSquares)){
                 color = "black";
                 r = 0;
                 g = 0;
                 b = 0;
+            }
+            if(findSquares(i,j,whiteSquares)){
+                color = "white";
+                r = 255;
+                g = 255;
+                b = 255;
             }
             drawSquare(i*50, j*50,r,g,b);
             board.push({x:i,y:j,r:r,g:g,b:b,color:color});
