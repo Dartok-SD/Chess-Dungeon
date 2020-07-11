@@ -13,29 +13,32 @@ var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"]
 var pieceArr = ["pawn","knight","bishop","rook","queen"];
 var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
 var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
+var flagImg = new Image();
+flagImg.src = "assets/flag.png";
+var flag = {x:4, y:9}
 var board = [];
 var moveableSquares = [];
 var wqueen = new Image();
-wqueen.src = "assests/"+wassets[4];
+wqueen.src = "assets/"+wassets[4];
 var wrook = new Image();
-wrook.src = "assests/"+wassets[3];
+wrook.src = "assets/"+wassets[3];
 var wbishop = new Image();
-wbishop.src  = "assests/"+wassets[2];
+wbishop.src  = "assets/"+wassets[2];
 var wknight = new Image();
-wknight.src  = "assests/"+wassets[1];
+wknight.src  = "assets/"+wassets[1];
 var bqueen = new Image();
-bqueen.src = "assests/"+bassets[4];
+bqueen.src = "assets/"+bassets[4];
 var brook = new Image();
-brook.src = "assests/"+bassets[3];
+brook.src = "assets/"+bassets[3];
 var bbishop = new Image();
-bbishop.src  = "assests/"+bassets[2];
+bbishop.src  = "assets/"+bassets[2];
 var bknight = new Image();
-bknight.src  = "assests/"+bassets[1];
+bknight.src  = "assets/"+bassets[1];
 imgs = [wqueen, wrook, wbishop, wknight, bqueen, brook, bbishop, bknight];
 var wking = new Image();
-wking.src = "assests/wking.png";
+wking.src = "assets/wking.png";
 var bking = new Image();
-bking.src = "assests/bking.png";
+bking.src = "assets/bking.png";
 
 var dx = 0;
 var dy = 0;
@@ -297,6 +300,7 @@ function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawBoard();
     drawQueue();
+    context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
     context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
 }
 function drawQueue(){
