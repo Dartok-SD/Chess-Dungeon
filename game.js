@@ -5,15 +5,18 @@ var ground = {x:0, y:425, width: canvas.width, height: 50, mode:-1, restitution:
 var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution:0.2},
     {x:350,y:350,width:50,height:100, mode:-1, restitution:0.2}, {x:550, y:350,width:100,height:100, mode:-1, restitution:0.2},
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
-// var y = 400;
-// var x = 30;
 var player = {x:1, y:1, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black"};
 var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
 var pieceArr = ["pawn","knight","bishop","rook","queen"];
-var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
-var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
-var flagImg = new Image();
+// var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
+// var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
+var room1 = [[1,4],[3,1],[3,5],[4,2],[4,5],[5,2],[5,5]];
+var door1 = [[0,3],[0,4]];
+var door2 = [[3,0],[4,0]];
+var door3 = [[7,3],[7,4]];
+var door4 = [[3,7],[4,7]];
+{var flagImg = new Image();
 flagImg.src = "assets/flag.png";
 var flag = {x:4, y:9}
 var board = [];
@@ -41,9 +44,7 @@ var bking = new Image();
 bking.src = "assets/bking.png";
 win = false;
 lose = false;
-var dx = 0;
-var dy = 0;
-
+}
 var queue = [0,1,2,3,4,5,6,7];
 
 function cyclePieces(){
@@ -71,19 +72,19 @@ function cyclePieces(){
             break;
         case 4:
             player.piece = "queen";
-            player.blockedColor = "white";
+            // player.blockedColor = "white";
             break;
         case 5:
             player.piece = "rook";
-            player.blockedColor = "white";
+            // player.blockedColor = "white";
             break;
         case 6:
             player.piece = "bishop";
-            player.blockedColor = "white";
+            // player.blockedColor = "white";
             break;
         case 7:
             player.piece = "knight";
-            player.blockedColor = "white";
+            // player.blockedColor = "white";
             break;
     }
 }
@@ -334,12 +335,12 @@ function draw(){
 }
 function drawQueue(){
     context.font = "30px Arial";
-    context.fillText("Next Piece", 600, 50);
+    context.fillText("Next Piece", 800, 50);
     
-    context.drawImage(imgs[queue[1]], 600, 100, 50, 50);
-    context.drawImage(imgs[queue[2]], 600, 150, 50, 50);
-    context.drawImage(imgs[queue[3]], 600, 200, 50, 50);
-    context.drawImage(imgs[queue[4]], 600, 250, 50, 50);
+    context.drawImage(imgs[queue[1]], 800, 100, 50, 50);
+    context.drawImage(imgs[queue[2]], 800, 150, 50, 50);
+    context.drawImage(imgs[queue[3]], 800, 200, 50, 50);
+    context.drawImage(imgs[queue[4]], 800, 250, 50, 50);
 }
 function findSquares(x,y,list){
     for(var i =0; i < list.length; i++){
@@ -351,12 +352,12 @@ function findSquares(x,y,list){
     return false;
 }
 function drawBoard(){
-    for(var j = 0; j < 12; j++){
-        for(var i = 0; i < 10; i++){
+    for(var j = 0; j < 8; j++){
+        for(var i = 0; i < 8; i++){
             var color = "gray";
-            var r = 200;
-            var g = 200;
-            var b = 200;
+            var r = 150;
+            var g = 150;
+            var b = 150;
             if((i+j)%2 == 0){
                 color = "gray";
                 r = 100;
@@ -364,24 +365,26 @@ function drawBoard(){
                 b = 100;
             }
             
-            if( i == 0 || j == 0 || i == 9 || j == 11){
+            if( i == 0 || j == 0 || i == 7 || j == 7){
+                if(!findSquares(i,j,door1) && !findSquares(i,j,door2) && !findSquares(i,j,door3) && !findSquares(i,j,door4)){
+                    color = "black";
+                    r = 0;
+                    g = 0;
+                    b = 0;
+                }   
+            }
+            if(findSquares(i,j,room1)){
                 color = "black";
                 r = 0;
                 g = 0;
                 b = 0;
             }
-            if(findSquares(i,j,blackSquares)){
-                color = "black";
-                r = 0;
-                g = 0;
-                b = 0;
-            }
-            if(findSquares(i,j,whiteSquares)){
-                color = "white";
-                r = 255;
-                g = 255;
-                b = 255;
-            }
+            // if(findSquares(i,j,whiteSquares)){
+            //     color = "white";
+            //     r = 255;
+            //     g = 255;
+            //     b = 255;
+            // }
             drawSquare(i*50, j*50,r,g,b);
             board.push({x:i,y:j,r:r,g:g,b:b,color:color});
         }
