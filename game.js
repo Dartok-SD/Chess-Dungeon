@@ -113,6 +113,7 @@ function cyclePieces(){
     }
 }
 
+// Not used anymore
 function checkMove(piece, x , y){
     if(piece == "rook" || piece == "queen"){
         if((player.x === x || player.y === y) &&( board[x+10*y].color !== "black")){
@@ -321,6 +322,8 @@ canvas.addEventListener('click', function(event){
     // console.log(board[x+10*y]);
     // console.log(x+10*y)
     // console.log(moveableSquares);
+    // console.log(player);
+    // console.log(board[39]);
     if(inMoveableSquares(x,y)){
         player.x = x;
         player.y = y;
@@ -428,6 +431,7 @@ function whichDoor(x,y,doors){
     return door;
 }
 function drawBoard(room,doors){
+    board.splice(0,board.length);
     for(var j = 0; j < 8; j++){
         for(var i = 0; i < 8; i++){
             var color = "gray";
