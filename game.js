@@ -39,7 +39,7 @@ var wking = new Image();
 wking.src = "assets/wking.png";
 var bking = new Image();
 bking.src = "assets/bking.png";
-
+win = false;
 var dx = 0;
 var dy = 0;
 
@@ -293,15 +293,31 @@ canvas.addEventListener('click', function(event){
         player.x = x;
         player.y = y;
         cyclePieces();
+        if(player.x === flag.x && player.y === flag.y){
+            win = true;
+        }
     }
 
 });
+function drawWin(){
+    context.font = "72px Arial";
+    context.fillStyle = "red";
+    context.fillText("You Win", 400,400)
+}
+function drawLose(){
+    context.font = "72px Arial";
+    context.fillStyle = "red";
+    context.fillText("Game Over", 400,400)
+}
 function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawBoard();
     drawQueue();
     context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
     context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
+    if(win){
+        drawWin();
+    }
 }
 function drawQueue(){
     context.font = "30px Arial";
