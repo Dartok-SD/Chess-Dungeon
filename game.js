@@ -332,9 +332,37 @@ canvas.addEventListener('click', function(event){
         if(moveableSquares.length === 0){
             lose = true;
         }
+        var roomx = currentRoom[1];
+        var roomy = currentRoom[0];
+        if(findDoors(x,y,doorLayout[roomx][roomy])){
+            // console.log("touched door");
+            var door = whichDoor(x,y,doorLayout[roomx][roomy])
+            moveRooms(door);
+        }
     }
 
 });
+
+function moveRooms(door){
+    switch(door){
+        case door1:
+            currentRoom = [currentRoom[0]-1,currentRoom[1]];
+            player.x = 7;
+            break;
+        case door2:
+            currentRoom = [currentRoom[0],currentRoom[1]-1];
+            player.y = 7;
+            break;
+        case door3:
+            currentRoom = [currentRoom[0]+1,currentRoom[1]];
+            player.x = 0;
+            break;
+        case door4:
+            currentRoom = [currentRoom[0],currentRoom[1]+1];
+            player.y = 0;
+            break;
+    }
+}
 function drawWin(){
     context.font = "72px Arial";
     context.fillStyle = "red";
@@ -387,6 +415,17 @@ function findDoors(x,y,doors){
         }
     }
     return false;
+}
+function whichDoor(x,y,doors){
+    var isDoor;
+    var door = ["It messed up"];
+    for(var i = 0; i < doors.length; i++){
+        isDoor = findSquares(x,y,doors[i]);
+        if(isDoor){
+            return doors[i];
+        }
+    }
+    return door;
 }
 function drawBoard(room,doors){
     for(var j = 0; j < 8; j++){
