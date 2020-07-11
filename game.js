@@ -40,12 +40,18 @@ wking.src = "assets/wking.png";
 var bking = new Image();
 bking.src = "assets/bking.png";
 win = false;
+lose = false;
 var dx = 0;
 var dy = 0;
 
+var queue = [0,1,2,3,4,5,6,7];
+
 function cyclePieces(){
-    player.currentPiece = (player.currentPiece + 1)%8;
-    player.nextPiece = (player.nextPiece + 1)%8;
+    queue.push(queue.shift());
+    // player.currentPiece = (player.currentPiece + 1)%8;
+    // player.nextPiece = (player.nextPiece + 1)%8;
+    player.currentPiece = queue[0];
+    player.nextPiece = queue[1];
     switch(player.currentPiece){
         case 0:
             player.piece = "queen";
@@ -296,6 +302,10 @@ canvas.addEventListener('click', function(event){
         if(player.x === flag.x && player.y === flag.y){
             win = true;
         }
+        generateMoveableSquares(player.piece, player.blockedColor);
+        if(moveableSquares.length === 0){
+            lose = true;
+        }
     }
 
 });
@@ -318,12 +328,18 @@ function draw(){
     if(win){
         drawWin();
     }
+    if(lose){
+        drawLose();
+    }
 }
 function drawQueue(){
     context.font = "30px Arial";
     context.fillText("Next Piece", 600, 50);
     
-    context.drawImage(imgs[player.nextPiece], 600, 100, 50, 50)
+    context.drawImage(imgs[queue[1]], 600, 100, 50, 50);
+    context.drawImage(imgs[queue[2]], 600, 150, 50, 50);
+    context.drawImage(imgs[queue[3]], 600, 200, 50, 50);
+    context.drawImage(imgs[queue[4]], 600, 250, 50, 50);
 }
 function findSquares(x,y,list){
     for(var i =0; i < list.length; i++){
