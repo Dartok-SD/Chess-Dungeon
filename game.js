@@ -5,7 +5,8 @@ var ground = {x:0, y:425, width: canvas.width, height: 50, mode:-1, restitution:
 var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution:0.2},
     {x:350,y:350,width:50,height:100, mode:-1, restitution:0.2}, {x:550, y:350,width:100,height:100, mode:-1, restitution:0.2},
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
-var player = {x:1, y:1, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black"};
+var player = {x:3, y:5, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black"};
+var flag = {x:4, y:1};
 var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
 var pieceArr = ["pawn","knight","bishop","rook","queen"];
@@ -13,6 +14,8 @@ var boardLength = 8;
 // var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
 // var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
 var currentRoom = [1,4];
+var flagRoom = [2,0];
+// var flagRoom = [1,4]
 var room0 = [];
 var room1 = [[1,4],[3,1],[3,5],[4,2],[4,5],[5,2],[5,5]];
 var room2 = [[1,1],[1,4],[3,2],[4,2],[5,2],[2,3],[5,3],[2,4],[5,5],[5,6],[6,6]];
@@ -34,7 +37,7 @@ var doorLayout = [[[door3,door4],[door1,door3,door4],[door1,door4]],
 
 {var flagImg = new Image();
 flagImg.src = "assets/flag.png";
-var flag = {x:4, y:9}
+// var flag = {x:4, y:9}
 var board = [];
 var moveableSquares = [];
 var wqueen = new Image();
@@ -324,11 +327,14 @@ canvas.addEventListener('click', function(event){
     // console.log(moveableSquares);
     // console.log(player);
     // console.log(board[39]);
+    console.log(currentRoom);
     if(inMoveableSquares(x,y)){
         player.x = x;
         player.y = y;
         cyclePieces();
-        if(player.x === flag.x && player.y === flag.y){
+        var roomx = currentRoom[1];
+        var roomy = currentRoom[0];
+        if(player.x === flag.x && player.y === flag.y && roomx === flagRoom[1] && roomy === flagRoom[0]){
             win = true;
         }
         generateMoveableSquares(player.piece, player.blockedColor);
@@ -380,9 +386,14 @@ function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     var roomx = currentRoom[1];
     var roomy = currentRoom[0];
-    drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy]);
+    var isFlag = false;
+
+    drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],isFlag);
     drawQueue();
-    context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
+    if(roomx === flagRoom[1] && roomy === flagRoom[0]){
+        isFlag = true;
+        context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
+    }
     context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
     if(win){
         drawWin();
@@ -393,12 +404,12 @@ function draw(){
 }
 function drawQueue(){
     context.font = "30px Arial";
-    context.fillText("Next Piece", 800, 50);
+    context.fillText("Next Piece", 600, 50);
     
-    context.drawImage(imgs[queue[1]], 800, 100, 50, 50);
-    context.drawImage(imgs[queue[2]], 800, 150, 50, 50);
-    context.drawImage(imgs[queue[3]], 800, 200, 50, 50);
-    context.drawImage(imgs[queue[4]], 800, 250, 50, 50);
+    context.drawImage(imgs[queue[1]], 600, 100, 50, 50);
+    context.drawImage(imgs[queue[2]], 600, 150, 50, 50);
+    context.drawImage(imgs[queue[3]], 600, 200, 50, 50);
+    context.drawImage(imgs[queue[4]], 600, 250, 50, 50);
 }
 function findSquares(x,y,list){
     for(var i =0; i < list.length; i++){
@@ -430,7 +441,7 @@ function whichDoor(x,y,doors){
     }
     return door;
 }
-function drawBoard(room,doors){
+function drawBoard(room,doors,flag){
     board.splice(0,board.length);
     for(var j = 0; j < 8; j++){
         for(var i = 0; i < 8; i++){
