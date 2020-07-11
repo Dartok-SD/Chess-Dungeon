@@ -7,15 +7,42 @@ var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
 // var y = 400;
 // var x = 30;
-var player = {x:1, y:1, piece:"queen"};
-var assests = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
+var player = {x:1, y:1, piece:"queen", currentPiece: 0, nextPiece: 1};
+var assets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var pieceArr = ["pawn","knight","bishop","rook","queen"];
+var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3]]
 var board = [];
 var moveableSquares = [];
-var img = new Image();
-img.src = "assests/"+assests[4];
+var queen = new Image();
+queen.src = "assests/"+assets[4];
+var rook = new Image();
+rook.src = "assests/"+assets[3];
+var bishop = new Image();
+bishop.src  = "assests/"+assets[2];
+var knight = new Image();
+knight.src  = "assests/"+assets[1];
+imgs = [queen, rook, bishop, knight];
 var dx = 0;
 var dy = 0;
+
+function cyclePieces(){
+    player.currentPiece = (player.currentPiece + 1)%4;
+    player.nextPiece = (player.nextPiece + 1)%4;
+    switch(player.currentPiece){
+        case 0:
+            player.piece = "queen";
+            break;
+        case 1:
+            player.piece = "rook";
+            break;
+        case 2:
+            player.piece = "bishop";
+            break;
+        case 3:
+            player.piece = "knight";
+            break;
+    }
+}
 
 function checkMove(piece, x , y){
     if(piece == "rook" || piece == "queen"){
@@ -217,7 +244,7 @@ function inMoveableSquares(x,y){
 }
 
 canvas.addEventListener('click', function(event){
-    generateMoveableSquares("queen");
+    generateMoveableSquares(player.piece);
     var x = Math.floor(event.pageX/50);
     var y = Math.floor(event.pageY/50);
     // console.log(board);
@@ -227,15 +254,31 @@ canvas.addEventListener('click', function(event){
     if(inMoveableSquares(x,y)){
         player.x = x;
         player.y = y;
+        cyclePieces();
     }
 
 });
 function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     drawBoard();
-    context.drawImage(img, player.x*50, player.y*50, 50, 50);
+    drawQueue();
+    context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
 }
-
+function drawQueue(){
+    context.font = "30px Arial";
+    context.fillText("Next Piece", 600, 50);
+    
+    context.drawImage(imgs[player.nextPiece], 600, 100, 50, 50)
+}
+function findSquares(x,y){
+    for(var i =0; i < blackSquares.length; i++){
+        // var [a,b] = blackSquares[i];
+        if(blackSquares[i][0] === x && blackSquares[i][1] === y){
+            return true;
+        }
+    }
+    return false;
+}
 function drawBoard(){
     for(var j = 0; j < 12; j++){
         for(var i = 0; i < 10; i++){
@@ -251,6 +294,12 @@ function drawBoard(){
             }
             
             if( i == 0 || j == 0 || i == 9 || j == 11){
+                color = "black";
+                r = 0;
+                g = 0;
+                b = 0;
+            }
+            if(findSquares(i,j)){
                 color = "black";
                 r = 0;
                 g = 0;
