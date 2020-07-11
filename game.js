@@ -7,7 +7,7 @@ var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
 // var y = 400;
 // var x = 30;
-var player = {x:1, y:1, piece:"queen", currentPiece: 0, nextPiece: 1};
+var player = {x:1, y:1, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black"};
 var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
 var pieceArr = ["pawn","knight","bishop","rook","queen"];
@@ -46,27 +46,35 @@ function cyclePieces(){
     switch(player.currentPiece){
         case 0:
             player.piece = "queen";
+            player.blockedColor = "black";
             break;
         case 1:
             player.piece = "rook";
+            player.blockedColor = "black";
             break;
         case 2:
             player.piece = "bishop";
+            player.blockedColor = "black";
             break;
         case 3:
             player.piece = "knight";
+            player.blockedColor = "black";
             break;
         case 4:
             player.piece = "queen";
+            player.blockedColor = "white";
             break;
         case 5:
             player.piece = "rook";
+            player.blockedColor = "white";
             break;
         case 6:
             player.piece = "bishop";
+            player.blockedColor = "white";
             break;
         case 7:
             player.piece = "knight";
+            player.blockedColor = "white";
             break;
     }
 }
@@ -271,7 +279,7 @@ function inMoveableSquares(x,y){
 }
 
 canvas.addEventListener('click', function(event){
-    generateMoveableSquares(player.piece, "black");
+    generateMoveableSquares(player.piece, player.blockedColor);
     var x = Math.floor(event.pageX/50);
     var y = Math.floor(event.pageY/50);
     // console.log(board);
@@ -309,7 +317,7 @@ function findSquares(x,y,list){
 function drawBoard(){
     for(var j = 0; j < 12; j++){
         for(var i = 0; i < 10; i++){
-            var color = "white";
+            var color = "gray";
             var r = 200;
             var g = 200;
             var b = 200;
