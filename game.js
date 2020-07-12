@@ -1,5 +1,5 @@
 class Enemy{
-    constructor(x,y,roomx,roomy,piece, pieceNumber){
+    constructor(x,y,roomx,roomy,piece, pieceNumber,specialKnight){
         this.x = x;
         this.y = y;
         this.roomx = roomx;
@@ -7,6 +7,7 @@ class Enemy{
         this.piece = piece;
         this.pieceNumber = pieceNumber;
         this.alive = true;
+        this.specialKnight = specialKnight;
     }
 }
 
@@ -17,7 +18,7 @@ var ground = {x:0, y:425, width: canvas.width, height: 50, mode:-1, restitution:
 var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution:0.2},
     {x:350,y:350,width:50,height:100, mode:-1, restitution:0.2}, {x:550, y:350,width:100,height:100, mode:-1, restitution:0.2},
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
-var player = {x:3, y:5, piece:"king", currentPiece: 9, blockedColor: "black", alive:true};
+var player = {x:3, y:6, piece:"king", currentPiece: 9, blockedColor: "black", alive:true};
 var flag = {x:4, y:1};
 var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
@@ -25,9 +26,9 @@ var pieceArr = ["pawn","knight","bishop","rook","queen"];
 var boardLength = 8;
 // var blackSquares = [[1,3],[2,3],[3,3],[4,3],[5,3],[6,3],[7,3],[1,4],[2,4],[3,4],[4,4],[5,4],[6,4],[7,4],[6,5],[6,6],[7,6],[8,6]];
 // var whiteSquares = [[2,7],[3,7],[4,7],[5,7],[6,7],[2,8],[3,8],[4,8],[5,8],[6,8],[5,9],[3,9],[4,10]];
-var currentRoom = [1,4];
+var currentRoom = [2,6];
 var flagRoom = [2,0];
-var enemy = new Enemy(3,3,1,4,"knight",7);
+var enemy = new Enemy(3,3,1,4,"knight",7, false);
 enemies = [];
 var enemyMove;
 // var flagRoom = [1,4]
@@ -37,20 +38,33 @@ var room2 = [[1,1],[1,4],[3,2],[4,2],[5,2],[2,3],[5,3],[2,4],[5,5],[5,6],[6,6]];
 var room3 = [[6,1],[2,2],[4,2],[3,3],[4,3],[5,3],[3,4],[4,4],[1,5],[5,5],[5,6]];
 var room4 = [[1,6],[3,1],[2,2],[5,2],[5,3],[2,4],[5,5]];
 var room5 = [[1,3],[6,1],[3,2],[5,2],[2,3],[6,3],[4,4],[3,5],[6,6]];
-var knightRoom = [[3,3],[5,3],[2,4],[6,6],[6,4],[2,6]];
+var room6 = [[1,1],[2,1],[1,2],[2,2],[5,1],[6,1],[5,2],[6,2],[1,5],[2,5],[1,6],[2,6],[5,5],[6,5],[5,6],[6,6]];
+var room7 = [[1,1],[2,1],[1,2],[5,1],[6,1],[6,2],[3,3],[3,4],[4,3],[4,4],[1,5],[1,6],[2,6],[6,5],[5,6],[6,6]];
+var room8 = [[5,1],[1,2],[3,1],[5,3],[2,4],[4,5],[6,5],[2,6]];
+var room9 = [[1,1],[6,1],[2,2],[5,2],[4,3],[2,5],[5,5],[6,6],[1,6]];
+var room10 = [[5,1],[2,2],[3,2],[5,2],[6,2],[2,3],[5,4],[1,5],[2,5],[4,5],[5,5],[2,6]];
+possibleLayouts = [room0,room1,room2,room3,room4,room5,room6,room7,room8,room9,room10];
+var knightRoom = [[3,2],[5,2],[2,3],[6,5],[6,3],[2,5],[3,6],[5,6]];
 var noRoom = filledRoom();
 var door1 = [[0,3],[0,4]];
 var door2 = [[3,0],[4,0]];
 var door3 = [[7,3],[7,4]];
 var door4 = [[3,7],[4,7]];
 var generated = false;
-var roomLayout = [[room5,room2,room1],[room4,room5,room3],[room3,room2,room1],[noRoom,knightRoom,noRoom],[noRoom,room0,noRoom]];
-var doorLayout = [[[door3,door4],[door1,door3,door4],[door1,door4]],
-                    [[door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door4]],
-                    [[door2,door3],[door1,door2,door3,door4],[door1,door2]],
-                    [[],[door2,door4],[]],
-                    [[],[door2],[]]];
-
+// var roomLayout = [[room5,room2,room1],[room4,room5,room3],[room3,room2,room1],[noRoom,knightRoom,noRoom],[noRoom,room0,noRoom]];
+var roomLayout = generateRoomLayout();
+// var doorLayout = [[[door3,door4],[door1,door3,door4],[door1,door4]],
+//                     [[door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door4]],
+//                     [[door2,door3],[door1,door2,door3,door4],[door1,door2]],
+//                     [[],[door2,door4],[]],
+//                     [[],[door2],[]]];
+var doorLayout = [[[door3,door4],[door1,door3,door4],[door1,door3,door4],[door1,door3,door4],[door1,door4]],
+                [[door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door4]],
+                [[door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door4]],
+                [[door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door3,door4],[door1,door2,door4]],
+                [[door2,door3],[door1,door2,door3],[door1,door2,door3,door4],[door1,door2,door3],[door1,door2]],
+                [[],[],[door2,door4],[],[]],
+                [[],[],[door2],[],[]]];
 {var flagImg = new Image();
 flagImg.src = "assets/flag.png";
 // var flag = {x:4, y:9}
@@ -139,7 +153,40 @@ function cyclePieces(){
             player.piece = "king";
     }
 }
+function generateRoomLayout(){
+    var roomLayout = [];
+    for(var yRooms = 0; yRooms< 5; yRooms++){
+        var roomRow = [];
+        for(var xRooms = 0; xRooms< 5; xRooms++){
+            // Pick between a room 1-10
+            var pickRoom = getRndInteger(1,11);
+            roomRow.push(possibleLayouts[pickRoom]);
+        }
+        roomLayout.push(roomRow);
+    }
+    var knightRooms = [noRoom, noRoom, knightRoom, noRoom, noRoom];
+    var starterRooms = [noRoom, noRoom, room0, noRoom, noRoom]
 
+    roomLayout.push(knightRooms);
+    roomLayout.push(starterRooms);
+
+    return roomLayout
+}
+function generateFlagInformation(){
+    var y = 0;
+    var x = getRndInteger(0,6);
+    flagRoom = [x,y];
+    while(true){
+        var xLocation = getRndInteger(2,6);
+        var yLocation = getRndInteger(2,6);
+        if(!findSquares(xLocation,yLocation,roomLayout[y][x])){
+            flag.x = xLocation;
+            flag.y = yLocation;
+            return;
+        }
+
+    }
+}
 function generateMoveableSquares(piece, color){
     moveableSquares.splice(0,moveableSquares.length);
     if(piece == "rook" || piece == "queen"){
@@ -200,6 +247,9 @@ function generateMoveableSquares(piece, color){
         var i = 1;
         var j = 1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -211,13 +261,14 @@ function generateMoveableSquares(piece, color){
             }
             i++;
             j++;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
+            
         }
         i = -1;
         j = 1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -229,13 +280,14 @@ function generateMoveableSquares(piece, color){
             }
             i--;
             j++;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
+            
         }
         i = 1;
         j = -1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -247,13 +299,13 @@ function generateMoveableSquares(piece, color){
             }
             i++;
             j--;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
         }
         i = -1;
         j = -1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -265,51 +317,72 @@ function generateMoveableSquares(piece, color){
             }
             i--;
             j--;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
         }
     }
     if(piece == "knight"){
         var i = 2;
         var j = 1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }  
         }
         i = 2;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -2;
         j = 1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -2;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = 1;
         j = 2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = 1;
         j = -2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -1;
         j = 2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -1;
         j = -2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         
     }
@@ -369,7 +442,6 @@ function generateMoveableSquares(piece, color){
         }
     }
 }
-
 function generateEnemySquares(player,piece,color){
     var enemySquares = [];
     if(piece == "rook" || piece == "queen"){
@@ -430,6 +502,9 @@ function generateEnemySquares(player,piece,color){
         var i = 1;
         var j = 1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -441,13 +516,14 @@ function generateEnemySquares(player,piece,color){
             }
             i++;
             j++;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
+            
         }
         i = -1;
         j = 1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -459,13 +535,14 @@ function generateEnemySquares(player,piece,color){
             }
             i--;
             j++;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
+            
         }
         i = 1;
         j = -1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -476,14 +553,14 @@ function generateEnemySquares(player,piece,color){
                 break;
             }
             i++;
-            j--;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
+            j--;   
         }
         i = -1;
         j = -1;
         while(true){
+            if(player.x + i > 7 || player.x + i < 0 || player.y + j > 7 || player.y + j < 0){
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
@@ -494,52 +571,75 @@ function generateEnemySquares(player,piece,color){
                 break;
             }
             i--;
-            j--;
-            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
-                break;
-            }
+            j--;            
         }
     }
     if(piece == "knight"){
         var i = 2;
         var j = 1;
+
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
+            
         }
         i = 2;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -2;
         j = 1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -2;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = 1;
         j = 2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+           if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = 1;
         j = -2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -1;
         j = 2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = -1;
         j = -2;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){
+            } else {
+                enemySquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         
     }
@@ -654,9 +754,12 @@ canvas.addEventListener('click', function(event){
                 win = true;
             }
             
-            if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
+            if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y && enemies[roomx][roomy].alive){
                 addToQueue(enemies[roomx][roomy].pieceNumber);
                 enemies[roomx][roomy].alive = false;
+                if(enemies[roomx][roomy].specialKnight){
+                    roomLayout[roomx][roomy] = room0;
+                }
             }
 
             // var roomx = currentRoom[1];
@@ -676,8 +779,10 @@ canvas.addEventListener('click', function(event){
             cyclePieces();
             if(enemies[roomx][roomy].alive && !switchedRooms){
                 killPlayer(enemies[roomx][roomy]);
-                enemies[roomx][roomy].x = enemyMove.x;
-                enemies[roomx][roomy].y = enemyMove.y;
+                if(enemyMove){
+                    enemies[roomx][roomy].x = enemyMove.x;
+                    enemies[roomx][roomy].y = enemyMove.y;
+                }
                 drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
                 moveEnemy(enemies[roomx][roomy]);
                 
@@ -747,10 +852,15 @@ function generateRandomEnemy(room,roomx,roomy){
         var x = getRndInteger(2,6);
         var y = getRndInteger(2,6);
         if(!findSquares(x,y,room)){
-            return new Enemy(x,y,roomx,roomy,piece,pieceNumber);
+            return new Enemy(x,y,roomx,roomy,piece,pieceNumber, false);
         }
 
     }
+}
+function generateKnightEnemy(room,roomx,roomy){
+    var pieceNumber = 7;
+    var piece = 7;
+    return new Enemy(4,4,roomx,roomy,piece,pieceNumber, true);
 }
 function generateEnemies(){
     // for()
@@ -759,6 +869,8 @@ function generateEnemies(){
         for(var j = 0; j < roomLayout[i].length;j++){
             if(roomLayout[i][j] == noRoom || roomLayout[i][j] == room0){
                 Yenemy.push([]);
+            } else if(roomLayout[i][j] == knightRoom){
+                Yenemy.push(generateKnightEnemy(roomLayout[i][j],j,i));
             } else {
                 var enemy = generateRandomEnemy(roomLayout[i][j],j,i);
                 Yenemy.push(enemy);
@@ -776,7 +888,7 @@ function draw(){
         drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],isFlag, null);
         generateEnemies();
         moveEnemy(enemies[roomx][roomy]);
-        
+        generateFlagInformation();
         generated = true;
     }
     drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],isFlag, enemies[roomx][roomy]);
