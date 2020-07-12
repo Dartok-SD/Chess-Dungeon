@@ -17,7 +17,7 @@ var ground = {x:0, y:425, width: canvas.width, height: 50, mode:-1, restitution:
 var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution:0.2},
     {x:350,y:350,width:50,height:100, mode:-1, restitution:0.2}, {x:550, y:350,width:100,height:100, mode:-1, restitution:0.2},
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
-var player = {x:3, y:5, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black", alive:true};
+var player = {x:3, y:5, piece:"pawn", currentPiece: 8, blockedColor: "black", alive:true};
 var flag = {x:4, y:1};
 var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
@@ -28,6 +28,7 @@ var boardLength = 8;
 var currentRoom = [1,4];
 var flagRoom = [2,0];
 var enemy = new Enemy(3,3,1,4,"knight",7);
+enemies = [];
 var enemyMove;
 // var flagRoom = [1,4]
 var room0 = [];
@@ -71,15 +72,20 @@ var bbishop = new Image();
 bbishop.src  = "assets/"+bassets[2];
 var bknight = new Image();
 bknight.src  = "assets/"+bassets[1];
-imgs = [wqueen, wrook, wbishop, wknight, bqueen, brook, bbishop, bknight];
 var wking = new Image();
 wking.src = "assets/wking.png";
 var bking = new Image();
 bking.src = "assets/bking.png";
+var wpawn = new Image();
+wpawn.src = "assets/wpawn.png";
+var bpawn = new Image();
+bpawn.src = "assets/bpawn.png";
+imgs = [wqueen, wrook, wbishop, wknight, bqueen, brook, bbishop, bknight, wpawn];
 win = false;
 lose = false;
 }
-var queue = [0,1,2,3];
+// var queue = [0,1,2,3];
+var queue = [8,8,8,8];
 function filledRoom() {
     var room = [];
     for(var i =1; i < 7; i++){
@@ -94,7 +100,6 @@ function cyclePieces(){
     // player.currentPiece = (player.currentPiece + 1)%8;
     // player.nextPiece = (player.nextPiece + 1)%8;
     player.currentPiece = queue[0];
-    player.nextPiece = queue[1];
     switch(player.currentPiece){
         case 0:
             player.piece = "queen";
@@ -128,6 +133,8 @@ function cyclePieces(){
             player.piece = "knight";
             // player.blockedColor = "white";
             break;
+        case 8:
+            player.piece = "pawn";
     }
 }
 
@@ -295,45 +302,57 @@ function generateMoveableSquares(piece, color){
     if(piece == "king"){
         var i = 1;
         var j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
         }
         i = 1;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
         }
         i = -1;
         j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
         }
         i = -1;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
         }
         var i = 1;
         var j = 0;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = -1;
         j = 0;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
         }
         i = 0;
         j = 1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
             moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
         }
         i = 0;
         j = -1;
-        if(board[(player.x+10*(player.y +i)+j)] && board[(player.x+10*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+10*(player.y +i)+j)]);
+        if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
         }
 
+    }
+    if(piece == "pawn"){
+        var i = -1;
+        if(board[(player.x+boardLength*(player.y +i))] && board[(player.x+boardLength*(player.y +i))].color !== color && board[(player.x+boardLength*(player.y +i))].color !== "enemy"){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i))]);
+        }
+        if(board[(player.x+boardLength*(player.y +i))+1] && board[(player.x+boardLength*(player.y +i))+1].color === "enemy"){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i))+1]);
+        }
+        if(board[(player.x+boardLength*(player.y +i))-1] && board[(player.x+boardLength*(player.y +i))-1].color === "enemy"){
+            moveableSquares.push(board[(player.x+boardLength*(player.y +i))-1]);
+        }
     }
 }
 
@@ -574,33 +593,38 @@ canvas.addEventListener('click', function(event){
         // console.log(player);
         // console.log(board[39]);
         // console.log(currentRoom);
+        // console.log(generateEnemySquares(enemy,enemy.piece,"black"));
+        console.log(enemies);
         if(inMoveableSquares(x,y)){
             player.x = x;
             player.y = y;
             cyclePieces();
             var roomx = currentRoom[1];
+            enemies[roomx][roomy];
             var roomy = currentRoom[0];
             if(player.x === flag.x && player.y === flag.y && roomx === flagRoom[1] && roomy === flagRoom[0]){
                 win = true;
+            }
+            
+
+            // var roomx = currentRoom[1];
+            // var roomy = currentRoom[0];
+            if(findDoors(x,y,doorLayout[roomx][roomy])){
+                var door = whichDoor(x,y,doorLayout[roomx][roomy])
+                moveRooms(door);
             }
             generateMoveableSquares(player.piece, player.blockedColor);
             if(moveableSquares.length === 0){
                 lose = true;
             }
-            var roomx = currentRoom[1];
-            var roomy = currentRoom[0];
-            if(findDoors(x,y,doorLayout[roomx][roomy])){
-                var door = whichDoor(x,y,doorLayout[roomx][roomy])
-                moveRooms(door);
+            if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
+                enemies[roomx][roomy].alive = false;
             }
-            if(player.x == enemy.x && player.y == enemy.y){
-                enemy.alive = false;
-            }
-            if(enemy.alive){
-                enemy.x = enemyMove.x;
-                enemy.y = enemyMove.y;
-                moveEnemy(enemy);
-                if(player.x == enemy.x && player.y == enemy.y){
+            if(enemies[roomx][roomy].alive){
+                enemies[roomx][roomy].x = enemyMove.x;
+                enemies[roomx][roomy].y = enemyMove.y;
+                moveEnemy(enemies[roomx][roomy]);
+                if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
                     player.alive = false;
                     lose = true;
                 }
@@ -640,18 +664,62 @@ function drawLose(){
     context.fillStyle = "red";
     context.fillText("Game Over", 400,400)
 }
+function generateRandomEnemy(room,roomx,roomy){
+    var pieceNumber = getRndInteger(4,7);
+        var piece;
+        switch(pieceNumber){
+            case 4:
+                piece = "queen";
+                break;
+            case 5:
+                piece = "rook";
+                break;
+            case 6:
+                piece = "bishop";
+                break;
+            case 7:
+                piece = "knight";
+                break;
+        } 
+    while(true){
+        var x = getRndInteger(2,5);
+        var y = getRndInteger(2,5);
+        if(!findSquares(x,y,room)){
+            return new Enemy(x,y,roomx,roomy,piece,pieceNumber);
+        }
+
+    }
+}
+function generateEnemies(){
+    // for()
+    for(var i = 0; i < roomLayout.length; i++){
+        var Yenemy = [];
+        for(var j = 0; j < roomLayout[i].length;j++){
+            if(roomLayout[i][j] == noRoom){
+                Yenemy.push([]);
+            } else {
+                var enemy = generateRandomEnemy(roomLayout[i][j],j,i);
+                Yenemy.push(enemy);
+            }
+        }
+        enemies.push(Yenemy);
+    }
+}
 function draw(){
     context.clearRect(0, 0, canvas.width, canvas.height);
     var roomx = currentRoom[1];
     var roomy = currentRoom[0];
     var isFlag = false;
-
-    drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],isFlag, enemy);
-    drawQueue();
     if(!generated){
-        moveEnemy(enemy);
+        drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],isFlag, null);
+        generateEnemies();
+        moveEnemy(enemies[roomx][roomy]);
+        
         generated = true;
     }
+    drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],isFlag, enemies[roomx][roomy]);
+    drawQueue();
+    
     if(roomx === flagRoom[1] && roomy === flagRoom[0]){
         isFlag = true;
         context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
@@ -659,8 +727,8 @@ function draw(){
     if(player.alive){
         context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
     }
-    if(enemy.alive){
-        context.drawImage(imgs[enemy.pieceNumber],enemy.x* 50, enemy.y*50,50,50);
+    if(enemies[roomx][roomy].alive){
+        context.drawImage(imgs[enemies[roomx][roomy].pieceNumber],enemies[roomx][roomy].x* 50, enemies[roomx][roomy].y*50,50,50);
     }
     if(win){
         drawWin();
