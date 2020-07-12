@@ -569,8 +569,8 @@ canvas.addEventListener('click', function(event){
     // console.log(board);
     // console.log(board[x+10*y]);
     // console.log(x+10*y);
-    console.log(moveableSquares);
-    console.log(player);
+    // console.log(moveableSquares);
+    // console.log(player);
     // console.log(board[39]);
     // console.log(currentRoom);
     if(inMoveableSquares(x,y)){
@@ -592,9 +592,15 @@ canvas.addEventListener('click', function(event){
             var door = whichDoor(x,y,doorLayout[roomx][roomy])
             moveRooms(door);
         }
-        enemy.x = enemyMove.x;
-        enemy.y = enemyMove.y;
-        moveEnemy(enemy);
+        if(player.x == enemy.x && player.y == enemy.y){
+            enemy.alive = false;
+        }
+        if(enemy.alive){
+            enemy.x = enemyMove.x;
+            enemy.y = enemyMove.y;
+            moveEnemy(enemy);
+        }
+        
     }
 
 });
@@ -646,7 +652,9 @@ function draw(){
         context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
     }
     context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
-    context.drawImage(imgs[enemy.pieceNumber],enemy.x* 50, enemy.y*50,50,50);
+    if(enemy.alive){
+        context.drawImage(imgs[enemy.pieceNumber],enemy.x* 50, enemy.y*50,50,50);
+    }
     if(win){
         drawWin();
     }
@@ -726,13 +734,13 @@ function drawBoard(room,doors,flag,enemy){
                 g = 0;
                 b = 0;
             }
-            if(enemyMove && enemyMove.x === i && enemyMove.y === j){
+            if(enemyMove && enemyMove.x === i && enemyMove.y === j && enemy.alive === true){
                 color = "red";
                 r = 255;
                 g = 0;
                 b = 0;
             }
-            if(enemy && enemy.x === i && enemy.y === j){
+            if(enemy && enemy.x === i && enemy.y === j && enemy.alive === true){
                 color = "enemy";
             }
             if(player.x === i && player.y === j){
