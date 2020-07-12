@@ -136,7 +136,7 @@ function generateMoveableSquares(piece, color){
     if(piece == "rook" || piece == "queen"){
         var i = 1;
         while(true){
-            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color !== z){
+            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color !== color){
                 moveableSquares.push(board[player.x+boardLength*player.y+i]);
             } else if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color === "enemy"){
                 moveableSquares.push(board[player.x+boardLength*player.y+i]);
@@ -531,7 +531,7 @@ canvas.addEventListener('click', function(event){
     // console.log(board[x+10*y]);
     // console.log(x+10*y);
     console.log(moveableSquares);
-    // console.log(player);
+    console.log(player);
     // console.log(board[39]);
     // console.log(currentRoom);
     if(inMoveableSquares(x,y)){
