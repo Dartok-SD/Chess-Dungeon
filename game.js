@@ -160,15 +160,15 @@ function cyclePieces(){
     }
 }
 function generateRoomLayout(){
-    var roomLayout = [];
+    var returnLayout = [];
     for(var yRooms = 0; yRooms< 5; yRooms++){
         var roomRow = [];
         for(var xRooms = 0; xRooms< 5; xRooms++){
             // Pick between a room 1-10
-            var pickRoom = getRndInteger(1,roomLayout.length);
+            var pickRoom = getRndInteger(1,possibleLayouts.length);
             roomRow.push(possibleLayouts[pickRoom]);
         }
-        roomLayout.push(roomRow);
+        returnLayout.push(roomRow);
     }
     var knightRooms = [noRoom, noRoom, knightRoom, noRoom, noRoom];
     var rookRooms = [noRoom, noRoom, rookRoom, noRoom, noRoom];
@@ -176,10 +176,10 @@ function generateRoomLayout(){
     var starterRooms = [noRoom, noRoom, room0, noRoom, noRoom]
     var freebieRooms = [knightRooms,rookRooms,bishopRooms];
     var pickFreebie = getRndInteger(0,3);
-    roomLayout.push(freebieRooms[pickFreebie]);
-    roomLayout.push(starterRooms);
+    returnLayout.push(freebieRooms[pickFreebie]);
+    returnLayout.push(starterRooms);
 
-    return roomLayout
+    return returnLayout
 }
 function generateFlagInformation(){
     var y = 0;
@@ -830,10 +830,13 @@ canvas.addEventListener('click', function(event){
                 roomy = currentRoom[0];
                 switchedRooms = true;
                 drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
+                if(enemies[roomx][roomy].alive && player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
+                    var newLocation = newEnemyLocation(roomLayout[roomx][roomy]);
+                    enemies[roomx][roomy].x = newLocation[0];
+                    enemies[roomx][roomy].y = newLocation[1];
+                }
                 moveEnemy(enemies[roomx][roomy]);
             }
-            
-
             cyclePieces();
             if(enemies[roomx][roomy].alive && !switchedRooms){
                 killPlayer(enemies[roomx][roomy]);
@@ -911,6 +914,16 @@ function generateRandomEnemy(room,roomx,roomy){
         var y = getRndInteger(2,6);
         if(!findSquares(x,y,room)){
             return new Enemy(x,y,roomx,roomy,piece,pieceNumber, false);
+        }
+
+    }
+}
+function newEnemyLocation(room){
+    while(true){
+        var x = getRndInteger(2,6);
+        var y = getRndInteger(2,6);
+        if(!findSquares(x,y,room)){
+            return [x,y];
         }
 
     }
