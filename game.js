@@ -586,7 +586,7 @@ function getRndInteger(min, max) {
   }
 function moveEnemy(enemy){
     enemySquares = generateEnemySquares(enemy,enemy.piece,"black");
-    var move = getRndInteger(0, enemySquares.length-1);
+    var move = getRndInteger(0, enemySquares.length);
     enemyMove = enemySquares[move];
 }
 // moveEnemy(enemy);
@@ -600,7 +600,7 @@ canvas.addEventListener('click', function(event){
         // console.log(board);
         // console.log(board[x+10*y]);
         // console.log(x+10*y);
-        console.log(moveableSquares);
+        // console.log(moveableSquares);
         // console.log(player);
         // console.log(board[39]);
         // console.log(currentRoom);
@@ -619,6 +619,10 @@ canvas.addEventListener('click', function(event){
                 win = true;
             }
             
+            if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
+                addToQueue(enemies[roomx][roomy].pieceNumber);
+                enemies[roomx][roomy].alive = false;
+            }
 
             // var roomx = currentRoom[1];
             // var roomy = currentRoom[0];
@@ -631,10 +635,7 @@ canvas.addEventListener('click', function(event){
                 moveEnemy(enemies[roomx][roomy]);
             }
             
-            if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
-                addToQueue(enemies[roomx][roomy].pieceNumber);
-                enemies[roomx][roomy].alive = false;
-            }
+
             cyclePieces();
             if(enemies[roomx][roomy].alive){
                 enemies[roomx][roomy].x = enemyMove.x;
@@ -689,7 +690,7 @@ function drawLose(){
     context.fillText("Game Over", 400,400)
 }
 function generateRandomEnemy(room,roomx,roomy){
-    var pieceNumber = getRndInteger(4,7);
+    var pieceNumber = getRndInteger(4,8);
         var piece;
         switch(pieceNumber){
             case 4:
@@ -706,8 +707,8 @@ function generateRandomEnemy(room,roomx,roomy){
                 break;
         } 
     while(true){
-        var x = getRndInteger(2,5);
-        var y = getRndInteger(2,5);
+        var x = getRndInteger(2,6);
+        var y = getRndInteger(2,6);
         if(!findSquares(x,y,room)){
             return new Enemy(x,y,roomx,roomy,piece,pieceNumber);
         }
