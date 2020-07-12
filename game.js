@@ -342,6 +342,10 @@ function generateEnemySquares(player,piece,color){
     if(piece == "rook" || piece == "queen"){
         var i = 1;
         while(true){
+            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color === "player"){
+                enemySquares.push(board[player.x+boardLength*player.y+i]);
+                break;
+            }
             if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color !== color){
                 enemySquares.push(board[player.x+boardLength*player.y+i]);
             } else {
@@ -351,6 +355,10 @@ function generateEnemySquares(player,piece,color){
         }
         i = -1;
         while(true){
+            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color === "player"){
+                enemySquares.push(board[player.x+boardLength*player.y+i]);
+                break;
+            }
             if(board[(player.x+boardLength*player.y)+i] && board[ (player.x+boardLength*player.y)+i].color !== color){
                 enemySquares.push(board[player.x+boardLength*player.y+i]);
             } else {
@@ -360,6 +368,10 @@ function generateEnemySquares(player,piece,color){
         }
         i = 1;
         while(true){
+            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color === "player"){
+                enemySquares.push(board[player.x+boardLength*(player.y+i)]);
+                break;
+            }
             if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color !== color){
                 enemySquares.push(board[player.x+boardLength*(player.y+i)]);
             } else {
@@ -369,6 +381,10 @@ function generateEnemySquares(player,piece,color){
         }
         i = -1;
         while(true){
+            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color === "player"){
+                enemySquares.push(board[player.x+boardLength*(player.y+i)]);
+                break;
+            }
             if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color !== color){
                 enemySquares.push(board[player.x+boardLength*(player.y+i)]);
             } else {
@@ -381,6 +397,10 @@ function generateEnemySquares(player,piece,color){
         var i = 1;
         var j = 1;
         while(true){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
+                enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
@@ -392,6 +412,10 @@ function generateEnemySquares(player,piece,color){
         i = -1;
         j = 1;
         while(true){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
+                enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
@@ -403,6 +427,10 @@ function generateEnemySquares(player,piece,color){
         i = 1;
         j = -1;
         while(true){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
+                enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
@@ -414,6 +442,10 @@ function generateEnemySquares(player,piece,color){
         i = -1;
         j = -1;
         while(true){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "player"){
+                enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
+                break;
+            }
             if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
                 enemySquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
