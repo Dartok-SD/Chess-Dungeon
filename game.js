@@ -211,6 +211,9 @@ function generateMoveableSquares(piece, color){
             }
             i++;
             j++;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
         i = -1;
         j = 1;
@@ -226,6 +229,9 @@ function generateMoveableSquares(piece, color){
             }
             i--;
             j++;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
         i = 1;
         j = -1;
@@ -241,6 +247,9 @@ function generateMoveableSquares(piece, color){
             }
             i++;
             j--;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
         i = -1;
         j = -1;
@@ -256,6 +265,9 @@ function generateMoveableSquares(piece, color){
             }
             i--;
             j--;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
     }
     if(piece == "knight"){
@@ -429,6 +441,9 @@ function generateEnemySquares(player,piece,color){
             }
             i++;
             j++;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
         i = -1;
         j = 1;
@@ -444,6 +459,9 @@ function generateEnemySquares(player,piece,color){
             }
             i--;
             j++;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
         i = 1;
         j = -1;
@@ -459,6 +477,9 @@ function generateEnemySquares(player,piece,color){
             }
             i++;
             j--;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
         i = -1;
         j = -1;
@@ -474,6 +495,9 @@ function generateEnemySquares(player,piece,color){
             }
             i--;
             j--;
+            if(player.x + i > 7 || player.x + i < 0 || player.y + i > 7 || player.y + i < 0){
+                break;
+            }
         }
     }
     if(piece == "knight"){
