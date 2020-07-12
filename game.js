@@ -1,5 +1,5 @@
 class Enemy{
-    constructor(x,y,roomx,roomy,piece, pieceNumber, alive){
+    constructor(x,y,roomx,roomy,piece, pieceNumber){
         this.x = x;
         this.y = y;
         this.roomx = roomx;
@@ -17,7 +17,7 @@ var ground = {x:0, y:425, width: canvas.width, height: 50, mode:-1, restitution:
 var level = [ground,{x : 200, y:350, width: 90, height: 50, mode:-1, restitution:0.2},
     {x:350,y:350,width:50,height:100, mode:-1, restitution:0.2}, {x:550, y:350,width:100,height:100, mode:-1, restitution:0.2},
     {x:350,y:250,width:50,height:100,mode:0, restitution:0.2}];
-var player = {x:3, y:5, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black"};
+var player = {x:3, y:5, piece:"queen", currentPiece: 0, nextPiece: 1, blockedColor: "black", alive:true};
 var flag = {x:4, y:1};
 var wassets = ["wpawn.png","wknight.png","wbishop.png","wrook.png","wqueen.png"];
 var bassets = ["bpawn.png","bknight.png","bbishop.png","brook.png","bqueen.png"];
@@ -561,48 +561,53 @@ function moveEnemy(enemy){
 }
 // moveEnemy(enemy);
 canvas.addEventListener('click', function(event){
-    generateMoveableSquares(player.piece, player.blockedColor);
-    
-    var x = Math.floor(event.pageX/50);
-    var y = Math.floor(event.pageY/50);
-    // console.log(doorLayout[0][0]);
-    // console.log(board);
-    // console.log(board[x+10*y]);
-    // console.log(x+10*y);
-    // console.log(moveableSquares);
-    // console.log(player);
-    // console.log(board[39]);
-    // console.log(currentRoom);
-    if(inMoveableSquares(x,y)){
-        player.x = x;
-        player.y = y;
-        cyclePieces();
-        var roomx = currentRoom[1];
-        var roomy = currentRoom[0];
-        if(player.x === flag.x && player.y === flag.y && roomx === flagRoom[1] && roomy === flagRoom[0]){
-            win = true;
-        }
+    if(player.alive){
         generateMoveableSquares(player.piece, player.blockedColor);
-        if(moveableSquares.length === 0){
-            lose = true;
+    
+        var x = Math.floor(event.pageX/50);
+        var y = Math.floor(event.pageY/50);
+        // console.log(doorLayout[0][0]);
+        // console.log(board);
+        // console.log(board[x+10*y]);
+        // console.log(x+10*y);
+        // console.log(moveableSquares);
+        // console.log(player);
+        // console.log(board[39]);
+        // console.log(currentRoom);
+        if(inMoveableSquares(x,y)){
+            player.x = x;
+            player.y = y;
+            cyclePieces();
+            var roomx = currentRoom[1];
+            var roomy = currentRoom[0];
+            if(player.x === flag.x && player.y === flag.y && roomx === flagRoom[1] && roomy === flagRoom[0]){
+                win = true;
+            }
+            generateMoveableSquares(player.piece, player.blockedColor);
+            if(moveableSquares.length === 0){
+                lose = true;
+            }
+            var roomx = currentRoom[1];
+            var roomy = currentRoom[0];
+            if(findDoors(x,y,doorLayout[roomx][roomy])){
+                var door = whichDoor(x,y,doorLayout[roomx][roomy])
+                moveRooms(door);
+            }
+            if(player.x == enemy.x && player.y == enemy.y){
+                enemy.alive = false;
+            }
+            if(enemy.alive){
+                enemy.x = enemyMove.x;
+                enemy.y = enemyMove.y;
+                moveEnemy(enemy);
+                if(player.x == enemy.x && player.y == enemy.y){
+                    player.alive = false;
+                    lose = true;
+                }
+            }
+            
         }
-        var roomx = currentRoom[1];
-        var roomy = currentRoom[0];
-        if(findDoors(x,y,doorLayout[roomx][roomy])){
-            var door = whichDoor(x,y,doorLayout[roomx][roomy])
-            moveRooms(door);
-        }
-        if(player.x == enemy.x && player.y == enemy.y){
-            enemy.alive = false;
-        }
-        if(enemy.alive){
-            enemy.x = enemyMove.x;
-            enemy.y = enemyMove.y;
-            moveEnemy(enemy);
-        }
-        
     }
-
 });
 
 function moveRooms(door){
@@ -651,7 +656,9 @@ function draw(){
         isFlag = true;
         context.drawImage(flagImg, flag.x*50, flag.y*50, 50, 50);
     }
-    context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
+    if(player.alive){
+        context.drawImage(imgs[player.currentPiece], player.x*50, player.y*50, 50, 50);
+    }
     if(enemy.alive){
         context.drawImage(imgs[enemy.pieceNumber],enemy.x* 50, enemy.y*50,50,50);
     }
@@ -664,13 +671,10 @@ function draw(){
 }
 function drawQueue(){
     context.font = "30px Arial";
-    context.fillText("Next Piece", 600, 50);
+    context.fillText("Next Piece", 450, 50);
     
     for(var i =1; i < queue.length; i++){
-        context.drawImage(imgs[queue[i]], 600, 50 + 50*i, 50, 50);
-        // context.drawImage(imgs[queue[2]], 600, 150, 50, 50);
-        // context.drawImage(imgs[queue[3]], 600, 200, 50, 50);
-        // context.drawImage(imgs[queue[4]], 600, 250, 50, 50);
+        context.drawImage(imgs[queue[i]], 450, 50 + 50*i, 50, 50);
     }
 
 }
@@ -720,7 +724,6 @@ function drawBoard(room,doors,flag,enemy){
             }
             
             if( i == 0 || j == 0 || i == 7 || j == 7){
-                //!findSquares(i,j,door1) && !findSquares(i,j,door2) && !findSquares(i,j,door3) && !findSquares(i,j,door4)
                 if(!findDoors(i,j,doors)){
                     color = "black";
                     r = 0;
