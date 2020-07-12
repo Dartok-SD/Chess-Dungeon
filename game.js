@@ -136,24 +136,25 @@ function generateMoveableSquares(piece, color){
     if(piece == "rook" || piece == "queen"){
         var i = 1;
         while(true){
-            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color !== color){
-                moveableSquares.push(board[player.x+boardLength*player.y+i]);
-            } else if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color === "enemy"){
+            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color === "enemy"){
                 moveableSquares.push(board[player.x+boardLength*player.y+i]);
                 break;
             }
-            else {
+            if(board[(player.x+boardLength*player.y)+i] && board[(player.x+boardLength*player.y)+i].color !== color){
+                moveableSquares.push(board[player.x+boardLength*player.y+i]);
+            } else {
                 break;
             }
             i++;
         }
         i = -1;
         while(true){
-            if(board[(player.x+boardLength*player.y)+i] && board[ (player.x+boardLength*player.y)+i].color !== color){
-                moveableSquares.push(board[player.x+boardLength*player.y+i]);
-            } else if (board[(player.x+boardLength*player.y)+i] && board[ (player.x+boardLength*player.y)+i].color === "enemy"){
+            if (board[(player.x+boardLength*player.y)+i] && board[ (player.x+boardLength*player.y)+i].color === "enemy"){
                 moveableSquares.push(board[player.x+boardLength*player.y+i]);
                 break;
+            }
+            if(board[(player.x+boardLength*player.y)+i] && board[ (player.x+boardLength*player.y)+i].color !== color){
+                moveableSquares.push(board[player.x+boardLength*player.y+i]);
             } else {
                 break;
             }
@@ -161,11 +162,12 @@ function generateMoveableSquares(piece, color){
         }
         i = 1;
         while(true){
-            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color !== color){
-                moveableSquares.push(board[player.x+boardLength*(player.y+i)]);
-            } else if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color === "enemy"){
+            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color === "enemy"){
                 moveableSquares.push(board[player.x+boardLength*(player.y+i)]);
                 break;
+            }
+            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color !== color){
+                moveableSquares.push(board[player.x+boardLength*(player.y+i)]);
             } else {
                 break;
             }
@@ -173,12 +175,13 @@ function generateMoveableSquares(piece, color){
         }
         i = -1;
         while(true){
-            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color !== color){
-                moveableSquares.push(board[player.x+boardLength*(player.y+i)]);
-            } else if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color === "enemy"){
+            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color === "enemy"){
                 moveableSquares.push(board[player.x+boardLength*(player.y+i)]);
                 break;
-            }else {
+            }
+            if(board[player.x+boardLength*(player.y+i)] && board[player.x+boardLength*(player.y+i)].color !== color){
+                moveableSquares.push(board[player.x+boardLength*(player.y+i)]);
+            } else {
                 break;
             }
             i--;
@@ -188,11 +191,12 @@ function generateMoveableSquares(piece, color){
         var i = 1;
         var j = 1;
         while(true){
-            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
-                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
-            } else if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
+            }
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
+                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
                 break;
             }
@@ -202,11 +206,12 @@ function generateMoveableSquares(piece, color){
         i = -1;
         j = 1;
         while(true){
-            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
-                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
-            } else if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
+            }
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
+                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
                 break;
             }
@@ -216,11 +221,12 @@ function generateMoveableSquares(piece, color){
         i = 1;
         j = -1;
         while(true){
-            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
-                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
-            } else if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
+            }
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
+                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
                 break;
             }
@@ -230,11 +236,12 @@ function generateMoveableSquares(piece, color){
         i = -1;
         j = -1;
         while(true){
-            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
-                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
-            } else if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color === "enemy"){
                 moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
                 break;
+            }
+            if(board[(player.x+boardLength*(player.y+j))+i] && board[(player.x+boardLength*(player.y+j))+i].color !== color){
+                moveableSquares.push(board[(player.x+boardLength*(player.y+j))+i]);
             } else {
                 break;
             }
