@@ -751,7 +751,7 @@ function killPlayer(enemy){
 }
 // moveEnemy(enemy);
 canvas.addEventListener('click', function(event){
-    if(player.alive){
+    if(player.alive && !win){
         generateMoveableSquares(player.piece, player.blockedColor);
     
         var x = Math.floor(event.pageX/50);
@@ -931,8 +931,9 @@ function draw(){
     }
     if(win){
         drawWin();
+        // throw new Error("Game is over!");
     }
-    if(lose){
+    if(lose && !win){
         drawLose();
     }
 }
