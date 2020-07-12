@@ -613,6 +613,17 @@ function moveEnemy(enemy){
     var move = getRndInteger(0, enemySquares.length);
     enemyMove = enemySquares[move];
 }
+
+function killPlayer(enemy){
+    enemySquares = generateEnemySquares(enemy,enemy.piece,"black");
+    for(var i = 0; i < enemySquares.length; i++){
+        if(enemySquares[i].x === player.x && enemySquares[i].y === player.y){
+            enemyMove = enemySquares[i];
+        }       
+    }
+    // var move = getRndInteger(0, enemySquares.length);
+    // enemyMove = enemySquares[move];
+}
 // moveEnemy(enemy);
 canvas.addEventListener('click', function(event){
     if(player.alive){
@@ -650,23 +661,25 @@ canvas.addEventListener('click', function(event){
 
             // var roomx = currentRoom[1];
             // var roomy = currentRoom[0];
+            var switchedRooms = false;
             if(findDoors(x,y,doorLayout[roomx][roomy])){
                 var door = whichDoor(x,y,doorLayout[roomx][roomy])
                 moveRooms(door);
                 roomx = currentRoom[1];
                 roomy = currentRoom[0];
+                switchedRooms = true;
                 drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
                 moveEnemy(enemies[roomx][roomy]);
             }
             
 
             cyclePieces();
-            if(enemies[roomx][roomy].alive){
+            if(enemies[roomx][roomy].alive && !switchedRooms){
+                killPlayer(enemies[roomx][roomy]);
                 enemies[roomx][roomy].x = enemyMove.x;
                 enemies[roomx][roomy].y = enemyMove.y;
                 drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
                 moveEnemy(enemies[roomx][roomy]);
-                
                 
                 if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
                     player.alive = false;
@@ -886,4 +899,4 @@ function drawSquare(x,y,r,g,b){
     context.closePath();
 }
 
-setInterval(draw,12);
+setInterval(draw,10);
