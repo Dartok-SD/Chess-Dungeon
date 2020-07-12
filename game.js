@@ -593,15 +593,17 @@ canvas.addEventListener('click', function(event){
         // console.log(player);
         // console.log(board[39]);
         // console.log(currentRoom);
-        // console.log(generateEnemySquares(enemy,enemy.piece,"black"));
+        var roomx = currentRoom[1];
+        var roomy = currentRoom[0];
+        console.log(generateEnemySquares(enemies[roomx][roomy],enemies[roomx][roomy].piece,"black"));
         console.log(enemies);
         if(inMoveableSquares(x,y)){
             player.x = x;
             player.y = y;
             cyclePieces();
             var roomx = currentRoom[1];
-            enemies[roomx][roomy];
             var roomy = currentRoom[0];
+            // enemies[roomx][roomy];
             if(player.x === flag.x && player.y === flag.y && roomx === flagRoom[1] && roomy === flagRoom[0]){
                 win = true;
             }
@@ -612,22 +614,29 @@ canvas.addEventListener('click', function(event){
             if(findDoors(x,y,doorLayout[roomx][roomy])){
                 var door = whichDoor(x,y,doorLayout[roomx][roomy])
                 moveRooms(door);
+                roomx = currentRoom[1];
+                roomy = currentRoom[0];
             }
-            generateMoveableSquares(player.piece, player.blockedColor);
-            if(moveableSquares.length === 0){
-                lose = true;
-            }
+            
             if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
                 enemies[roomx][roomy].alive = false;
             }
             if(enemies[roomx][roomy].alive){
                 enemies[roomx][roomy].x = enemyMove.x;
                 enemies[roomx][roomy].y = enemyMove.y;
+                drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
                 moveEnemy(enemies[roomx][roomy]);
+                
+                
                 if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
                     player.alive = false;
                     lose = true;
                 }
+            }
+            drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
+            generateMoveableSquares(player.piece, player.blockedColor);
+            if(moveableSquares.length === 0){
+                lose = true;
             }
             
         }
