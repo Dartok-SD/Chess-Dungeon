@@ -736,6 +736,7 @@ function moveEnemy(enemy){
     enemySquares = generateEnemySquares(enemy,enemy.piece,"black");
     var move = getRndInteger(0, enemySquares.length);
     enemyMove = enemySquares[move];
+    killPlayer(enemy);
 }
 
 function killPlayer(enemy){
