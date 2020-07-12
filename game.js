@@ -47,7 +47,7 @@ var room11 = [[3,2],[2,3],[5,3],[2,4],[5,4],[3,5],[4,5]];
 var room12 = [[3,2],[4,2],[2,3],[3,4],[4,4],[5,5],[6,5]];
 var room13 = [[4,2],[2,3],[3,5],[5,4]];
 var room14 = [[3,3],[3,4],[4,3],[4,4]];
-possibleLayouts = [room0,room1,room2,room3,room4,room5,room6,room7,room8,room9,room10,room11,room12,room13];
+possibleLayouts = [room0,room1,room2,room3,room4,room5,room6,room7,room8,room9,room10,room11,room12,room13,room14];
 var knightRoom = [[3,2],[5,2],[2,3],[6,5],[6,3],[2,5],[3,6],[5,6]];
 var rookRoom = [[4,2],[3,3],[5,3],[4,4]];
 var bishopRoom = [[2,2],[4,2],[2,4],[4,4]];
@@ -411,42 +411,66 @@ function generateMoveableSquares(piece, color){
         var i = 1;
         var j = 1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }
         }
         i = 1;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
         i = -1;
         j = 1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
         i = -1;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
         var i = 1;
         var j = 0;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
         i = -1;
         j = 0;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
         i = 0;
         j = 1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
         i = 0;
         j = -1;
         if(board[(player.x+boardLength*(player.y +i)+j)] && board[(player.x+boardLength*(player.y +i)+j)].color !== color){
-            moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            if(player.y + i > 7 || player.y + i < 0 || player.x + j > 7 || player.x + j < 0){   
+            } else {
+                moveableSquares.push(board[(player.x+boardLength*(player.y +i)+j)]);
+            }        
         }
 
     }
