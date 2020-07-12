@@ -566,6 +566,12 @@ function generateEnemySquares(player,piece,color){
 }
 function addToQueue(piece){
     queue.push(piece-4);
+    for(var i =0; i < queue.length; i++){
+        if(queue[i] === 9){
+            queue.splice(i,1);
+            break;
+        }
+    }
 }
 function inMoveableSquares(x,y){
     for(var i = 0; i < moveableSquares.length; i++){
@@ -605,7 +611,7 @@ canvas.addEventListener('click', function(event){
         if(inMoveableSquares(x,y)){
             player.x = x;
             player.y = y;
-            cyclePieces();
+            
             var roomx = currentRoom[1];
             var roomy = currentRoom[0];
             // enemies[roomx][roomy];
@@ -621,12 +627,15 @@ canvas.addEventListener('click', function(event){
                 moveRooms(door);
                 roomx = currentRoom[1];
                 roomy = currentRoom[0];
+                drawBoard(roomLayout[roomx][roomy],doorLayout[roomx][roomy],false, enemies[roomx][roomy]);
+                moveEnemy(enemies[roomx][roomy]);
             }
             
             if(player.x == enemies[roomx][roomy].x && player.y == enemies[roomx][roomy].y){
                 addToQueue(enemies[roomx][roomy].pieceNumber);
                 enemies[roomx][roomy].alive = false;
             }
+            cyclePieces();
             if(enemies[roomx][roomy].alive){
                 enemies[roomx][roomy].x = enemyMove.x;
                 enemies[roomx][roomy].y = enemyMove.y;
@@ -710,7 +719,7 @@ function generateEnemies(){
     for(var i = 0; i < roomLayout.length; i++){
         var Yenemy = [];
         for(var j = 0; j < roomLayout[i].length;j++){
-            if(roomLayout[i][j] == noRoom){
+            if(roomLayout[i][j] == noRoom || roomLayout[i][j] == room0){
                 Yenemy.push([]);
             } else {
                 var enemy = generateRandomEnemy(roomLayout[i][j],j,i);
