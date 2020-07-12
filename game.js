@@ -45,6 +45,8 @@ var room9 = [[1,1],[6,1],[2,2],[5,2],[4,3],[2,5],[5,5],[6,6],[1,6]];
 var room10 = [[5,1],[2,2],[3,2],[5,2],[6,2],[2,3],[5,4],[1,5],[2,5],[4,5],[5,5],[2,6]];
 possibleLayouts = [room0,room1,room2,room3,room4,room5,room6,room7,room8,room9,room10];
 var knightRoom = [[3,2],[5,2],[2,3],[6,5],[6,3],[2,5],[3,6],[5,6]];
+var rookRoom = [[4,2],[3,3],[5,3],[4,4]];
+var bishopRoom = [[2,2],[4,2],[2,4],[4,4]]
 var noRoom = filledRoom();
 var door1 = [[0,3],[0,4]];
 var door2 = [[3,0],[4,0]];
@@ -159,15 +161,18 @@ function generateRoomLayout(){
         var roomRow = [];
         for(var xRooms = 0; xRooms< 5; xRooms++){
             // Pick between a room 1-10
-            var pickRoom = getRndInteger(1,11);
+            var pickRoom = getRndInteger(1,roomLayout.length);
             roomRow.push(possibleLayouts[pickRoom]);
         }
         roomLayout.push(roomRow);
     }
     var knightRooms = [noRoom, noRoom, knightRoom, noRoom, noRoom];
+    var rookRooms = [noRoom, noRoom, rookRoom, noRoom, noRoom];
+    var bishopRooms = [noRoom, noRoom, bishopRoom, noRoom, noRoom];
     var starterRooms = [noRoom, noRoom, room0, noRoom, noRoom]
-
-    roomLayout.push(knightRooms);
+    var freebieRooms = [knightRooms,rookRooms,bishopRooms];
+    var pickFreebie = getRndInteger(0,3);
+    roomLayout.push(freebieRooms[pickFreebie]);
     roomLayout.push(starterRooms);
 
     return roomLayout
@@ -884,8 +889,18 @@ function generateRandomEnemy(room,roomx,roomy){
 }
 function generateKnightEnemy(room,roomx,roomy){
     var pieceNumber = 7;
-    var piece = 7;
+    var piece = "knight";
     return new Enemy(4,4,roomx,roomy,piece,pieceNumber, true);
+}
+function generateBishopEnemy(room,roomx,roomy){
+    var pieceNumber = 6;
+    var piece = "bishop";
+    return new Enemy(3,3,roomx,roomy,piece,pieceNumber, true);
+}
+function generateRookEnemy(room,roomx,roomy){
+    var pieceNumber = 5;
+    var piece = "rook";
+    return new Enemy(4,3,roomx,roomy,piece,pieceNumber, true);
 }
 function generateEnemies(){
     // for()
@@ -896,7 +911,11 @@ function generateEnemies(){
                 Yenemy.push([]);
             } else if(roomLayout[i][j] == knightRoom){
                 Yenemy.push(generateKnightEnemy(roomLayout[i][j],j,i));
-            } else {
+            } else if(roomLayout[i][j] == bishopRoom){
+                Yenemy.push(generateBishopEnemy(roomLayout[i][j],j,i));
+            }else if(roomLayout[i][j] == rookRoom){
+                Yenemy.push(generateRookEnemy(roomLayout[i][j],j,i));
+            }else {
                 var enemy = generateRandomEnemy(roomLayout[i][j],j,i);
                 Yenemy.push(enemy);
             }
